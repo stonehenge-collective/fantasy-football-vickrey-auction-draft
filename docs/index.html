@@ -1,1 +1,36 @@
-<!doctype html><html><h1>Hello world</h1><marquee>this is very deprecated</marquee></html>
+<!doctype html>
+<html>
+  <head><meta charset="utf-8" /></head>
+  <body>
+    <div id="root"><h1>hello</h1></div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE",
+            authDomain: "test-vickrey.firebaseapp.com",
+            projectId: "test-vickrey",
+            storageBucket: "test-vickrey.firebasestorage.app",
+            messagingSenderId: "373721638486",
+            appId: "1:373721638486:web:1884aeaf06132f1047fdf7",
+            measurementId: "G-LGCLMMK0EJ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db  = getFirestore(app);
+
+        const mainDocRef = doc(db, "pages", "main");
+
+        onSnapshot(mainDocRef, snap => {
+            const data = snap.data();
+            const html = data?.html ?? "<h1>No HTML found</h1>";
+            document.getElementById("root").innerHTML = html;
+        });
+    </script>
+  </body>
+</html>
+
+
