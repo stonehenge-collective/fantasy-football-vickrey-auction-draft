@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"cloud.google.com/go/firestore"
 )
@@ -15,7 +16,7 @@ func main() {
 
 	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
 	if projectID == "" {
-		projectID = "test-vickrey" // fallback when running locally
+		projectID = "test-vickrey"
 	}
 
 	client, err := firestore.NewClient(ctx, projectID)
@@ -25,7 +26,18 @@ func main() {
 	defer client.Close()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, Firestore project %s!", projectID)
+		docRef := client.Collection("messages").NewDoc()
+		_, err := docRef.Set(ctx, map[string]interface{}{
+			"content":   "Hello Firestore",
+			"timestamp": time.Now(),
+		})
+		if err != nil {
+			http.Error(w, "failed to write to Firestore", http.StatusInternalServerError)
+			log.Printf("firestore write: %v", err)
+			return
+		}
+
+		fmt.Fprintf(w, "Wrote document %s to Firestore in project %s\n", docRef.ID, projectID)
 	})
 
 	port := os.Getenv("PORT")
