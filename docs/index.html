@@ -7,6 +7,13 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
         import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+        import {
+          getAuth,
+          onAuthStateChanged,
+          signInWithCustomToken,
+          indexedDBLocalPersistence,
+          setPersistence
+        } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE",
@@ -21,14 +28,35 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db  = getFirestore(app);
+        const auth = getAuth(app);
 
-        const mainDocRef = doc(db, "pages", "main");
+        await setPersistence(auth, indexedDBLocalPersistence)
 
-        onSnapshot(mainDocRef, snap => {
-            const data = snap.data();
-            const html = data?.html ?? "<h1>No HTML found</h1>";
-            document.getElementById("root").innerHTML = html;
-        });
+        function streamPublicView() {
+          const mainDocRef = doc(db, "pages", "main");
+
+          onSnapshot(mainDocRef, snap => {
+              const data = snap.data();
+              const html = data?.html ?? "<h1>No HTML found</h1>";
+              document.getElementById("root").innerHTML = html;
+          });
+        }
+
+        function streamTeamView() {
+          // user is null → render login UI
+        }
+
+        onAuthStateChanged(auth, user => {
+          if (user) streamPublicView()
+          else streamTeamView()
+        })
+
+        /* login flow */
+        async function login() {
+          // call your Lambda to get a custom token
+          const { token } = await fetch('/getCustomToken').then(r => r.json())
+          await signInWithCustomToken(auth, token)
+        }
     </script>
   </body>
 </html>
