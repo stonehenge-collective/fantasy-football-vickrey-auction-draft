@@ -87,7 +87,7 @@
         const password = event.target.draftPassword.value;
 
         try {
-          const res = await fetch('http://localhost:8080/', {
+          const res = await fetch('https://vickrey-registration-373721638486.us-east1.run.app', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
