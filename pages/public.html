@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <div id="root">
+    <h1>Hello world from firestore!</h1>
+    <marquee>this is very very very deprecated</marquee>
+  </div>
+  <input type="text" id="userInput" placeholder="Type something..." />
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';
+    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
+    import {
+      getFirestore,
+      doc,
+      onSnapshot,
+    } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: 'AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE',
+      authDomain: 'test-vickrey.firebaseapp.com',
+      projectId: 'test-vickrey',
+      storageBucket: 'test-vickrey.firebasestorage.app',
+      messagingSenderId: '373721638486',
+      appId: '1:373721638486:web:1884aeaf06132f1047fdf7',
+      measurementId: 'G-LGCLMMK0EJ',
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+    const mainDocRef = doc(db, 'pages', 'public');
+
+    onSnapshot(mainDocRef, (snap) => {
+      const data = snap.data();
+      const html = data?.html ?? '<h1>No HTML found</h1>';
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const remoteRoot = doc.getElementById('root');
+      if (!remoteRoot) return;
+
+      const localRoot = document.getElementById('root');
+      if (!localRoot) return;
+
+      localRoot.innerHTML = remoteRoot.innerHTML;
+    });
+  </script>
+</html>

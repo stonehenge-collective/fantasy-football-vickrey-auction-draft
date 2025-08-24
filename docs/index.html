@@ -1,64 +1,103 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head><meta charset="utf-8" /></head>
+  <head>
+    <meta charset="utf-8" />
+    <title>Spinner</title>
+    <style>
+      /* full-screen layout */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        background: #e6f4ff; /* light blue */
+        display: flex; /* center children */
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* spinning animation */
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .spinner img {
+        width: 80px;
+        height: auto;
+        animation: spin 2s linear infinite;
+        display: block;
+      }
+    </style>
+  </head>
   <body>
-    <div id="root"><h1>hello</h1></div>
+    <div class="spinner">
+      <img src="spinner.png" alt="Loading..." />
+    </div>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-        import {
-          getAuth,
-          onAuthStateChanged,
-          signInWithCustomToken,
-          indexedDBLocalPersistence,
-          setPersistence
-        } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
+      import {
+        getFirestore,
+        doc,
+        onSnapshot,
+      } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signInWithCustomToken,
+        indexedDBLocalPersistence,
+        setPersistence,
+      } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE",
-            authDomain: "test-vickrey.firebaseapp.com",
-            projectId: "test-vickrey",
-            storageBucket: "test-vickrey.firebasestorage.app",
-            messagingSenderId: "373721638486",
-            appId: "1:373721638486:web:1884aeaf06132f1047fdf7",
-            measurementId: "G-LGCLMMK0EJ"
-        };
+      const firebaseConfig = {
+        apiKey: 'AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE',
+        authDomain: 'test-vickrey.firebaseapp.com',
+        projectId: 'test-vickrey',
+        storageBucket: 'test-vickrey.firebasestorage.app',
+        messagingSenderId: '373721638486',
+        appId: '1:373721638486:web:1884aeaf06132f1047fdf7',
+        measurementId: 'G-LGCLMMK0EJ',
+      };
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db  = getFirestore(app);
-        const auth = getAuth(app);
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
 
-        await setPersistence(auth, indexedDBLocalPersistence)
+      await setPersistence(auth, indexedDBLocalPersistence);
 
-        function streamPublicView() {
-          const mainDocRef = doc(db, "pages", "main");
+      function streamPublicView() {
+        const mainDocRef = doc(db, 'pages', 'public');
 
-          onSnapshot(mainDocRef, snap => {
-              const data = snap.data();
-              const html = data?.html ?? "<h1>No HTML found</h1>";
-              document.getElementById("root").innerHTML = html;
-          });
-        }
+        onSnapshot(mainDocRef, (snap) => {
+          const data = snap.data();
+          const html = data?.html ?? '<h1>No HTML found</h1>';
+          document.open();
+          document.write(html);
+          document.close();
+        });
+      }
 
-        function streamTeamView() {
-          // user is null → render login UI
-        }
+      function streamTeamView() {
+        // user is null → render login UI
+      }
 
-        onAuthStateChanged(auth, user => {
-          if (user) streamPublicView()
-          else streamTeamView()
-        })
+      onAuthStateChanged(auth, (user) => {
+        if (user) streamTeamView();
+        else streamPublicView();
+      });
 
-        /* login flow */
-        async function login() {
-          // call your Lambda to get a custom token
-          const { token } = await fetch('/getCustomToken').then(r => r.json())
-          await signInWithCustomToken(auth, token)
-        }
+      async function login() {
+        const { token } = await fetch('/getCustomToken').then((r) => r.json());
+        await signInWithCustomToken(auth, token);
+      }
     </script>
   </body>
 </html>
-
-
