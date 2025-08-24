@@ -1,45 +1,111 @@
 <!DOCTYPE html>
 <html>
-  <div id="root">
-    <h1>Hello world from firestore!</h1>
-    <marquee>this is very very very deprecated</marquee>
-  </div>
-  <input type="text" id="userInput" placeholder="Type something..." />
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';
-    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
-    import {
-      getFirestore,
-      doc,
-      onSnapshot,
-    } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+  <head>
+    <meta charset="utf-8" />
+    <title>Join Draft</title>
+  </head>
+  <style>
+    #joinDraftForm {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 28rem;
+    }
 
-    const firebaseConfig = {
-      apiKey: 'AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE',
-      authDomain: 'test-vickrey.firebaseapp.com',
-      projectId: 'test-vickrey',
-      storageBucket: 'test-vickrey.firebasestorage.app',
-      messagingSenderId: '373721638486',
-      appId: '1:373721638486:web:1884aeaf06132f1047fdf7',
-      measurementId: 'G-LGCLMMK0EJ',
-    };
+    #joinDraftForm input[type='text'] {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+  </style>
+  <body>
+    <div id="root"></div>
+    <form id="joinDraftForm">
+      <input
+        type="text"
+        id="sleeperUsername"
+        name="sleeperUsername"
+        placeholder="Enter Sleeper username to join draft."
+        title="Enter Sleeper username to join draft."
+        autocomplete="username"
+        required
+      />
+      <input
+        type="text"
+        id="draftPassword"
+        name="draftPassword"
+        placeholder="Make up a draft password or, if you're re-joining, use your existing password."
+        title="Make up a draft password or, if you're re-joining, use your existing password."
+        autocomplete="current-password"
+        required
+      />
+      <button type="submit">Join Draft</button>
+    </form>
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
-    const mainDocRef = doc(db, 'pages', 'public');
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
+      import {
+        getFirestore,
+        doc,
+        onSnapshot,
+      } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 
-    onSnapshot(mainDocRef, (snap) => {
-      const data = snap.data();
-      const html = data?.html ?? '<h1>No HTML found</h1>';
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const remoteRoot = doc.getElementById('root');
-      if (!remoteRoot) return;
+      const firebaseConfig = {
+        apiKey: 'AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE',
+        authDomain: 'test-vickrey.firebaseapp.com',
+        projectId: 'test-vickrey',
+        storageBucket: 'test-vickrey.firebasestorage.app',
+        messagingSenderId: '373721638486',
+        appId: '1:373721638486:web:1884aeaf06132f1047fdf7',
+        measurementId: 'G-LGCLMMK0EJ',
+      };
 
+      const app = initializeApp(firebaseConfig);
+      getAnalytics(app);
+
+      const db = getFirestore(app);
+      const mainDocRef = doc(db, 'pages', 'public');
       const localRoot = document.getElementById('root');
-      if (!localRoot) return;
 
-      localRoot.innerHTML = remoteRoot.innerHTML;
-    });
-  </script>
+      onSnapshot(mainDocRef, (snap) => {
+        const html = snap.data()?.html ?? '<h1>No HTML found</h1>';
+        const remoteRoot = new DOMParser()
+          .parseFromString(html, 'text/html')
+          .getElementById('root');
+        if (localRoot && remoteRoot) localRoot.innerHTML = remoteRoot.innerHTML;
+      });
+
+      const form = document.getElementById('joinDraftForm');
+      form.addEventListener('submit', joinDraft);
+
+      async function joinDraft(event) {
+        event.preventDefault();
+
+        const username = event.target.sleeperUsername.value.trim();
+        const password = event.target.draftPassword.value;
+
+        try {
+          const res = await fetch('http://localhost:8080/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+          });
+
+          if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || `Request failed with status ${res.status}`);
+          }
+
+          const data = await res.json();
+          console.log('Server response:', data);
+          alert('Successfully joined draft!');
+        } catch (err) {
+          console.error(err);
+          alert('There was a problem joining the draft. See console for details.');
+        }
+      }
+    </script>
+  </body>
 </html>
