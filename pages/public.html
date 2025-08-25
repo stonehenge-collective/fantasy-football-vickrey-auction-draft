@@ -48,9 +48,17 @@
       import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
       import {
         getFirestore,
+        connectFirestoreEmulator,
         doc,
         onSnapshot,
       } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+      import {
+        getAuth,
+        connectAuthEmulator,
+        signInWithCustomToken,
+        indexedDBLocalPersistence,
+        setPersistence,
+      } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 
       const firebaseConfig = {
         apiKey: 'AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE',
@@ -64,8 +72,12 @@
 
       const app = initializeApp(firebaseConfig);
       getAnalytics(app);
+      const auth = getAuth(app);
+      setPersistence(auth, indexedDBLocalPersistence);
+      connectAuthEmulator(auth, 'http://localhost:9099');
 
       const db = getFirestore(app);
+      connectFirestoreEmulator(db, 'localhost', 9090);
       const mainDocRef = doc(db, 'pages', 'public');
       const localRoot = document.getElementById('root');
 
@@ -87,20 +99,34 @@
         const password = event.target.draftPassword.value;
 
         try {
-          const res = await fetch('https://vickrey-registration-373721638486.us-east1.run.app', {
+          const res = await fetch('http://localhost:8080/', {
+            //https://vickrey-registration-373721638486.us-east1.run.app
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
           });
 
-          if (!res.ok) {
+          if (res.status === 404) {
+            alert('Team name not found');
+          } else if (res.status === 401) {
+            alert('Invalid password');
+          } else if (!res.ok) {
             const text = await res.text();
             throw new Error(text || `Request failed with status ${res.status}`);
-          }
+          } else {
+            const token_response = await res.json();
+            console.log('Server response:', token_response);
+            await signInWithCustomToken(auth, token_response.token);
+            const teamPageRef = doc(db, 'pages', username);
 
-          const data = await res.json();
-          console.log('Server response:', data);
-          alert('Successfully joined draft!');
+            onSnapshot(teamPageRef, (snap) => {
+              const data = snap.data();
+              const html = data?.html ?? '<h1>No HTML found</h1>';
+              document.open();
+              document.write(html);
+              document.close();
+            });
+          }
         } catch (err) {
           console.error(err);
           alert('There was a problem joining the draft. See console for details.');

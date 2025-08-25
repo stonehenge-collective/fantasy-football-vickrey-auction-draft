@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Johnor's Draft</title>
+  </head>
+  <body>
+    <div id="root"><h1>Johnor's Draft</h1></div>
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
+      import {
+        getFirestore,
+        connectFirestoreEmulator,
+        doc,
+        onSnapshot,
+      } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+
+      const firebaseConfig = {
+        apiKey: 'AIzaSyBF7ONgQ0LCYGcf2pRpcUSjH4eaKDSNkwE',
+        authDomain: 'test-vickrey.firebaseapp.com',
+        projectId: 'test-vickrey',
+        storageBucket: 'test-vickrey.firebasestorage.app',
+        messagingSenderId: '373721638486',
+        appId: '1:373721638486:web:1884aeaf06132f1047fdf7',
+        measurementId: 'G-LGCLMMK0EJ',
+      };
+
+      const app = initializeApp(firebaseConfig);
+      getAnalytics(app);
+
+      const db = getFirestore(app);
+      connectFirestoreEmulator(db, 'localhost', 9090);
+      const docRef = doc(db, 'pages', 'johnor');
+      const localRoot = document.getElementById('root');
+
+      onSnapshot(docRef, (snap) => {
+        const html = snap.data()?.html ?? '<h1>No HTML found</h1>';
+        const remoteRoot = new DOMParser()
+          .parseFromString(html, 'text/html')
+          .getElementById('root');
+        if (localRoot && remoteRoot) localRoot.innerHTML = remoteRoot.innerHTML;
+      });
+    </script>
+  </body>
+</html>
