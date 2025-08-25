@@ -32,6 +32,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("firestore.NewClient: %v", err)
 	}
+	defer client.Close()
 	docRef := client.Collection("messages").NewDoc()
 	_, err = docRef.Set(ctx, map[string]interface{}{
 		"content":   "Hello Firestore",
