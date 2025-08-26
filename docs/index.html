@@ -85,12 +85,20 @@
         });
       }
 
-      function streamTeamView() {
-        // stream team-specific content
+      function streamTeamView(user) {
+        const teamDocRef = doc(db, 'pages', user.uid);
+
+        onSnapshot(teamDocRef, (snap) => {
+          const data = snap.data();
+          const html = data?.html ?? '<h1>No HTML found</h1>';
+          document.open();
+          document.write(html);
+          document.close();
+        });
       }
 
       onAuthStateChanged(auth, (user) => {
-        if (user) streamTeamView();
+        if (user) streamTeamView(user);
         else streamPublicView();
       });
     </script>
