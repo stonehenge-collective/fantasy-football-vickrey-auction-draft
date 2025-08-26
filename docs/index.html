@@ -93,11 +93,6 @@
         if (user) streamTeamView();
         else streamPublicView();
       });
-
-      async function login() {
-        const { token } = await fetch('/getCustomToken').then((r) => r.json());
-        await signInWithCustomToken(auth, token);
-      }
     </script>
   </body>
 </html>
