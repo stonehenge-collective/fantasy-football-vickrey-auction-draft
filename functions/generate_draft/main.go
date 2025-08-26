@@ -2,19 +2,21 @@ package main
 
 /*
    Creates an initial state document for a fantasy-football auction draft.
+
    * Pulls league members from the Sleeper API (filters out bots).
-   * Pulls the full NFL player list from the Sleeper API, keeps only
-     the fields needed for drafting, and also saves the raw response
-     to disk so it can be reused without calling the API again.
+   * Pulls the full NFL player list from the Sleeper API, caches the raw
+     response to players_raw.json, and keeps only draft-eligible players.
    * Builds a JSON “state” object:
        {
          "league_id": …,
          "created_dt": …,
-         "users": [ {display_name, current_budget, roster}, … ],
-         "players": {player_id: {...}, … }
+         "users": [ … ],
+         "players": [ … ]   // ordered by search_rank ascending
        }
-   * Persists that state as a document in Firestore under
-     the collection “drafts/{generated-uuid}”.
+   * Persists that state:
+       • to Firestore under drafts/{generated-uuid}
+       • to game_state.json on disk
+     and writes the filtered players slice to draft_players.json.
 
    Run locally, e.g.:
        go run main.go --league 1263349443621568512 --project my-gcp-project
@@ -29,6 +31,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
 	"time"
 
 	cloudfirestore "cloud.google.com/go/firestore"
@@ -36,12 +39,17 @@ import (
 )
 
 const (
-	defaultLeagueID = "1263349443621568512"
+	defaultLeagueID  = "1263349443621568512"
 	defaultProjectID = "test-vickrey"
-	playersURL      = "https://api.sleeper.app/v1/players/nfl"
-	usersURLTmpl    = "https://api.sleeper.app/v1/league/%s/users"
-	rawPlayersFile  = "players_raw.json"
-	budget          = 100
+
+	playersURL   = "https://api.sleeper.app/v1/players/nfl"
+	usersURLTmpl = "https://api.sleeper.app/v1/league/%s/users"
+
+	rawPlayersFile   = "players_raw.json"
+	draftPlayersFile = "draft_players.json"
+	gameStateFile    = "game_state.json"
+
+	budget = 100
 )
 
 type sleeperUser struct {
@@ -50,13 +58,13 @@ type sleeperUser struct {
 }
 
 type userState struct {
-	DisplayName  string   `json:"display_name" firestore:"display_name"`
+	DisplayName   string   `json:"display_name" firestore:"display_name"`
 	CurrentBudget int      `json:"current_budget" firestore:"current_budget"`
 	Roster        []string `json:"roster" firestore:"roster"`
 }
 
 type playerState struct {
-	FullName        string   `json:"full_name" firestore:"full_name"`
+	FullName         string   `json:"full_name" firestore:"full_name"`
 	SearchRank       int      `json:"search_rank" firestore:"search_rank"`
 	InjuryStatus     string   `json:"injury_status" firestore:"injury_status"`
 	Status           string   `json:"status" firestore:"status"`
@@ -64,10 +72,10 @@ type playerState struct {
 }
 
 type draftState struct {
-	LeagueID string                     `json:"league_id" firestore:"league_id"`
-	Created  time.Time                  `json:"created_dt" firestore:"created_dt"`
-	Users    []userState                `json:"users" firestore:"users"`
-	Players  map[string]playerState     `json:"players" firestore:"players"`
+	LeagueID string        `json:"league_id" firestore:"league_id"`
+	Created  time.Time     `json:"created_dt" firestore:"created_dt"`
+	Users    []userState   `json:"users" firestore:"users"`
+	Players  []playerState `json:"players" firestore:"players"`
 }
 
 func main() {
@@ -90,22 +98,33 @@ func main() {
 	}
 
 	players, err := loadPlayersFromFile()
-	if err != nil {                       // cache miss ➜ call API and save cache
-		var rawPlayers []byte
-		rawPlayers, players, err = fetchPlayers(ctx)
+	if err != nil {
+		var raw []byte
+		raw, players, err = fetchPlayers(ctx)
 		if err != nil {
 			log.Fatalf("fetch players: %v", err)
 		}
-		if err := os.WriteFile(rawPlayersFile, rawPlayers, 0o644); err != nil {
+		if err := os.WriteFile(rawPlayersFile, raw, 0o644); err != nil {
 			log.Fatalf("write raw players file: %v", err)
 		}
+	}
+
+	filtered := filterPlayers(players)
+	sort.Slice(filtered, func(i, j int) bool { return filtered[i].SearchRank < filtered[j].SearchRank })
+
+	if err := writeJSONFile(draftPlayersFile, filtered); err != nil {
+		log.Fatalf("write draft players file: %v", err)
 	}
 
 	state := draftState{
 		LeagueID: *leagueID,
 		Created:  time.Now(),
 		Users:    users,
-		Players:  players,
+		Players:  filtered,
+	}
+
+	if err := writeJSONFile(gameStateFile, state); err != nil {
+		log.Fatalf("write game state file: %v", err)
 	}
 
 	docID, err := saveDraft(ctx, *projectID, state)
@@ -147,7 +166,7 @@ func fetchLeagueUsers(ctx context.Context, leagueID string) ([]userState, error)
 			continue
 		}
 		result = append(result, userState{
-			DisplayName:  u.DisplayName,
+			DisplayName:   u.DisplayName,
 			CurrentBudget: budget,
 			Roster:        []string{},
 		})
@@ -177,6 +196,36 @@ func fetchPlayers(ctx context.Context) ([]byte, map[string]playerState, error) {
 		return nil, nil, fmt.Errorf("decode players: %w", err)
 	}
 	return raw, api, nil
+}
+
+func filterPlayers(all map[string]playerState) []playerState {
+	allowed := map[string]struct{}{
+		"QB": {}, "RB": {}, "WR": {}, "TE": {},
+	}
+	out := make([]playerState, 0, len(all))
+	for _, p := range all {
+		if p.SearchRank >= 250 || p.SearchRank == 0 {
+			continue
+		}
+		if p.FullName == "Player Invalid" {
+			continue
+		}
+		for _, pos := range p.FantasyPositions {
+			if _, ok := allowed[pos]; ok {
+				out = append(out, p)
+				break
+			}
+		}
+	}
+	return out
+}
+
+func writeJSONFile(path string, v any) error {
+	data, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, data, 0o644)
 }
 
 func saveDraft(ctx context.Context, projectID string, state draftState) (string, error) {

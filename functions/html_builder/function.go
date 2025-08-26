@@ -1,4 +1,53 @@
-<!DOCTYPE html>
+package function
+
+import (
+	"context"
+	"fmt"
+	"html"
+	"os"
+	"regexp"
+	"strings"
+
+	"cloud.google.com/go/firestore"
+)
+
+// FirestoreEvent mirrors the minimal shape of the CloudEvent payload we need.
+type FirestoreEvent struct {
+	OldValue struct{} `json:"oldValue"`
+	Value    struct {
+		Name   string                 `json:"name"`
+		Fields map[string]any         `json:"fields"` // not used – we re-read the doc
+	} `json:"value"`
+}
+
+// Draft mirrors the Firestore document.
+type Draft struct {
+	LeagueID string   `firestore:"league_id"`
+	Users    []User   `firestore:"users"`
+	Players  []Player `firestore:"players"`
+}
+
+type User struct {
+	DisplayName   string        `firestore:"display_name"`
+	CurrentBudget int           `firestore:"current_budget"`
+	Roster        []interface{} `firestore:"roster"`
+}
+
+type Player struct {
+	FullName         string   `firestore:"full_name"`
+	SearchRank       int      `firestore:"search_rank"`
+	InjuryStatus     string   `firestore:"injury_status"`
+	Status           string   `firestore:"status"`
+	FantasyPositions []string `firestore:"fantasy_positions"`
+}
+
+// constant HTML template; the three %s placeholders are:
+//
+//   1. <div id="root">…</div>            – generated users & players
+//   2. draftId used by mainDocRef
+//   3. draftId used by teamPageRef
+//
+const pageTemplate = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -11,16 +60,15 @@
       gap: 0.75rem;
       max-width: 28rem;
     }
-
     #joinDraftForm input[type='text'] {
-      width: 100%;
+      width: 100%%;
       padding: 0.5rem 0.75rem;
       font-size: 1rem;
       box-sizing: border-box;
     }
   </style>
   <body>
-    <div id="root">[list of users in the draft], [list of players in the draft]</div>
+    <div id="root">%s</div>
     <form id="joinDraftForm">
       <input
         type="text"
@@ -48,13 +96,11 @@
       import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
       import {
         getFirestore,
-        connectFirestoreEmulator,
         doc,
         onSnapshot,
       } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
       import {
         getAuth,
-        connectAuthEmulator,
         signInWithCustomToken,
         indexedDBLocalPersistence,
         setPersistence,
@@ -74,11 +120,9 @@
       getAnalytics(app);
       const auth = getAuth(app);
       setPersistence(auth, indexedDBLocalPersistence);
-      // connectAuthEmulator(auth, 'http://localhost:9099');
 
       const db = getFirestore(app);
-      // connectFirestoreEmulator(db, 'localhost', 9090);
-      const mainDocRef = doc(db, 'drafts', [draft document id], 'pages', 'public');
+      const mainDocRef = doc(db, 'drafts', '%s', 'pages', 'public');
       const localRoot = document.getElementById('root');
 
       onSnapshot(mainDocRef, (snap) => {
@@ -100,8 +144,6 @@
 
         try {
           const res = await fetch('https://vickrey-registration-373721638486.us-east1.run.app/', {
-            // https://vickrey-registration-373721638486.us-east1.run.app
-            // http://localhost:8080
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -113,12 +155,11 @@
             alert('Invalid password');
           } else if (!res.ok) {
             const text = await res.text();
-            throw new Error(text || `Request failed with status ${res.status}`);
+            throw new Error(text || 'Request failed with status ' + res.status);
           } else {
             const token_response = await res.json();
-            console.log('Server response:', token_response);
             await signInWithCustomToken(auth, token_response.token);
-            const teamPageRef = doc(db, 'drafts', [draft document id], 'pages', username);
+            const teamPageRef = doc(db, 'drafts', '%s', 'pages', username);
 
             onSnapshot(teamPageRef, (snap) => {
               const data = snap.data();
@@ -136,3 +177,67 @@
     </script>
   </body>
 </html>
+`
+
+// HandleDraft regenerates the public page every time a draft document is created or updated.
+func HandleDraft(ctx context.Context, e FirestoreEvent) error {
+	if ctx.Value("ce-type") == "google.cloud.firestore.document.v1.deleted" {
+		return nil
+	}
+
+	re := regexp.MustCompile(`^projects\/[^\/]+\/databases\/\(default\)\/documents\/(.+)$`)
+	docPath := re.ReplaceAllString(e.Value.Name, `$1`)
+	if !strings.HasPrefix(docPath, "drafts/") {
+		return fmt.Errorf("unexpected path %q", docPath)
+	}
+	parts := strings.Split(docPath, "/")
+	draftID := parts[len(parts)-1]
+
+	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
+    if projectID == "" {
+        return fmt.Errorf("GOOGLE_CLOUD_PROJECT not set")
+    }
+    client, err := firestore.NewClient(ctx, projectID)
+    if err != nil {
+        return fmt.Errorf("firestore client: %w", err)
+    }
+    defer client.Close()
+
+	snap, err := client.Doc(docPath).Get(ctx)
+	if err != nil {
+		return fmt.Errorf("read draft: %w", err)
+	}
+
+	var draft Draft
+	if err := snap.DataTo(&draft); err != nil {
+		return fmt.Errorf("decode draft: %w", err)
+	}
+
+	// Build comma-separated, HTML-escaped lists
+	userNames := make([]string, len(draft.Users))
+	for i, u := range draft.Users {
+		userNames[i] = html.EscapeString(u.DisplayName)
+	}
+	playerNames := make([]string, len(draft.Players))
+	for i, p := range draft.Players {
+		playerNames[i] = html.EscapeString(p.FullName)
+	}
+
+	root := fmt.Sprintf(
+		"<p>Users: %s</p><p>Players: %s</p>",
+		strings.Join(userNames, ", "),
+		strings.Join(playerNames, ", "),
+	)
+
+	htmlPage := fmt.Sprintf(pageTemplate, root, draftID, draftID)
+
+	if _, err := client.Collection("drafts").
+		Doc(draftID).
+		Collection("pages").
+		Doc("public").
+		Set(ctx, map[string]any{"html": htmlPage}); err != nil {
+		return fmt.Errorf("write public page: %w", err)
+	}
+
+	return nil
+}
