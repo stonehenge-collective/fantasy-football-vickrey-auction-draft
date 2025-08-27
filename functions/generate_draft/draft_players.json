@@ -18,21 +18,21 @@
     ]
   },
   {
-    "full_name": "Bijan Robinson",
-    "search_rank": 3,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Josh Allen",
     "search_rank": 3,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "QB"
+    ]
+  },
+  {
+    "full_name": "Bijan Robinson",
+    "search_rank": 3,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -48,15 +48,6 @@
     "full_name": "Justin Jefferson",
     "search_rank": 5,
     "injury_status": "Questionable",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
-    "full_name": "Amon-Ra St. Brown",
-    "search_rank": 6,
-    "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
@@ -81,8 +72,8 @@
     ]
   },
   {
-    "full_name": "Puka Nacua",
-    "search_rank": 7,
+    "full_name": "Amon-Ra St. Brown",
+    "search_rank": 6,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
@@ -96,6 +87,15 @@
     "status": "Active",
     "fantasy_positions": [
       "RB"
+    ]
+  },
+  {
+    "full_name": "Puka Nacua",
+    "search_rank": 7,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
     ]
   },
   {
@@ -144,7 +144,7 @@
     ]
   },
   {
-    "full_name": "Brian Thomas",
+    "full_name": "Nico Collins",
     "search_rank": 13,
     "injury_status": "",
     "status": "Active",
@@ -162,21 +162,12 @@
     ]
   },
   {
-    "full_name": "Nico Collins",
+    "full_name": "Brian Thomas",
     "search_rank": 13,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
-    ]
-  },
-  {
-    "full_name": "Jalen Hurts",
-    "search_rank": 14,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "QB"
     ]
   },
   {
@@ -186,6 +177,15 @@
     "status": "Active",
     "fantasy_positions": [
       "RB"
+    ]
+  },
+  {
+    "full_name": "Jalen Hurts",
+    "search_rank": 14,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "QB"
     ]
   },
   {
@@ -225,21 +225,21 @@
     ]
   },
   {
-    "full_name": "A.J. Brown",
-    "search_rank": 19,
-    "injury_status": "Questionable",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
     "full_name": "Travis Hunter",
     "search_rank": 19,
     "injury_status": "Questionable",
     "status": "Active",
     "fantasy_positions": [
       "DB",
+      "WR"
+    ]
+  },
+  {
+    "full_name": "A.J. Brown",
+    "search_rank": 19,
+    "injury_status": "Questionable",
+    "status": "Active",
+    "fantasy_positions": [
       "WR"
     ]
   },
@@ -253,15 +253,6 @@
     ]
   },
   {
-    "full_name": "Kyren Williams",
-    "search_rank": 24,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Trey McBride",
     "search_rank": 24,
     "injury_status": "",
@@ -271,12 +262,12 @@
     ]
   },
   {
-    "full_name": "Patrick Mahomes",
-    "search_rank": 26,
+    "full_name": "Kyren Williams",
+    "search_rank": 24,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "QB"
+      "RB"
     ]
   },
   {
@@ -286,6 +277,15 @@
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Patrick Mahomes",
+    "search_rank": 26,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "QB"
     ]
   },
   {
@@ -334,6 +334,15 @@
     ]
   },
   {
+    "full_name": "Garrett Wilson",
+    "search_rank": 32,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
+    ]
+  },
+  {
     "full_name": "Omarion Hampton",
     "search_rank": 32,
     "injury_status": "",
@@ -344,15 +353,6 @@
   },
   {
     "full_name": "Marvin Harrison",
-    "search_rank": 32,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
-    "full_name": "Garrett Wilson",
     "search_rank": 32,
     "injury_status": "",
     "status": "Active",
@@ -415,6 +415,15 @@
     ]
   },
   {
+    "full_name": "TreVeyon Henderson",
+    "search_rank": 41,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
+    ]
+  },
+  {
     "full_name": "Sam LaPorta",
     "search_rank": 41,
     "injury_status": "",
@@ -424,8 +433,8 @@
     ]
   },
   {
-    "full_name": "TreVeyon Henderson",
-    "search_rank": 41,
+    "full_name": "Kenneth Walker",
+    "search_rank": 42,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
@@ -439,15 +448,6 @@
     "status": "Active",
     "fantasy_positions": [
       "WR"
-    ]
-  },
-  {
-    "full_name": "Kenneth Walker",
-    "search_rank": 42,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
     ]
   },
   {
@@ -568,21 +568,21 @@
     ]
   },
   {
-    "full_name": "Justin Herbert",
-    "search_rank": 55,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "QB"
-    ]
-  },
-  {
     "full_name": "RJ Harvey",
     "search_rank": 55,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "RB"
+    ]
+  },
+  {
+    "full_name": "Justin Herbert",
+    "search_rank": 55,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "QB"
     ]
   },
   {
@@ -604,21 +604,21 @@
     ]
   },
   {
-    "full_name": "Isiah Pacheco",
-    "search_rank": 58,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Jameson Williams",
     "search_rank": 58,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Isiah Pacheco",
+    "search_rank": 58,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -640,21 +640,21 @@
     ]
   },
   {
-    "full_name": "Rome Odunze",
-    "search_rank": 62,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
     "full_name": "Travis Kelce",
     "search_rank": 62,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "TE"
+    ]
+  },
+  {
+    "full_name": "Rome Odunze",
+    "search_rank": 62,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
     ]
   },
   {
@@ -667,16 +667,16 @@
     ]
   },
   {
-    "full_name": "Caleb Williams",
+    "full_name": "D'Andre Swift",
     "search_rank": 66,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "QB"
+      "RB"
     ]
   },
   {
-    "full_name": "D'Andre Swift",
+    "full_name": "Kaleb Johnson",
     "search_rank": 66,
     "injury_status": "",
     "status": "Active",
@@ -694,12 +694,12 @@
     ]
   },
   {
-    "full_name": "Kaleb Johnson",
+    "full_name": "Caleb Williams",
     "search_rank": 66,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "RB"
+      "QB"
     ]
   },
   {
@@ -748,9 +748,9 @@
     ]
   },
   {
-    "full_name": "Chris Godwin",
+    "full_name": "Jerry Jeudy",
     "search_rank": 71,
-    "injury_status": "PUP",
+    "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
@@ -766,9 +766,9 @@
     ]
   },
   {
-    "full_name": "Jerry Jeudy",
+    "full_name": "Chris Godwin",
     "search_rank": 71,
-    "injury_status": "",
+    "injury_status": "PUP",
     "status": "Active",
     "fantasy_positions": [
       "WR"
@@ -838,15 +838,6 @@
     ]
   },
   {
-    "full_name": "Tyrone Tracy",
-    "search_rank": 80,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Brian Robinson",
     "search_rank": 80,
     "injury_status": "",
@@ -856,12 +847,12 @@
     ]
   },
   {
-    "full_name": "Jakobi Meyers",
-    "search_rank": 82,
+    "full_name": "Tyrone Tracy",
+    "search_rank": 80,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "WR"
+      "RB"
     ]
   },
   {
@@ -874,9 +865,9 @@
     ]
   },
   {
-    "full_name": "Khalil Shakir",
-    "search_rank": 83,
-    "injury_status": "Questionable",
+    "full_name": "Jakobi Meyers",
+    "search_rank": 82,
+    "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
@@ -901,18 +892,9 @@
     ]
   },
   {
-    "full_name": "Travis Etienne",
-    "search_rank": 86,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
-    "full_name": "Emeka Egbuka",
-    "search_rank": 86,
-    "injury_status": "",
+    "full_name": "Khalil Shakir",
+    "search_rank": 83,
+    "injury_status": "Questionable",
     "status": "Active",
     "fantasy_positions": [
       "WR"
@@ -934,6 +916,24 @@
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Emeka Egbuka",
+    "search_rank": 86,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
+    ]
+  },
+  {
+    "full_name": "Travis Etienne",
+    "search_rank": 86,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -982,21 +982,21 @@
     ]
   },
   {
-    "full_name": "Najee Harris",
-    "search_rank": 90,
-    "injury_status": "PUP",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Ricky Pearsall",
     "search_rank": 90,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Najee Harris",
+    "search_rank": 90,
+    "injury_status": "PUP",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -1081,7 +1081,7 @@
     ]
   },
   {
-    "full_name": "Zach Charbonnet",
+    "full_name": "J.K. Dobbins",
     "search_rank": 103,
     "injury_status": "",
     "status": "Active",
@@ -1090,7 +1090,7 @@
     ]
   },
   {
-    "full_name": "J.K. Dobbins",
+    "full_name": "Zach Charbonnet",
     "search_rank": 103,
     "injury_status": "",
     "status": "Active",
@@ -1105,6 +1105,15 @@
     "status": "Active",
     "fantasy_positions": [
       "QB"
+    ]
+  },
+  {
+    "full_name": "Josh Downs",
+    "search_rank": 104,
+    "injury_status": "Questionable",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
     ]
   },
   {
@@ -1123,15 +1132,6 @@
     "status": "Active",
     "fantasy_positions": [
       "RB"
-    ]
-  },
-  {
-    "full_name": "Josh Downs",
-    "search_rank": 104,
-    "injury_status": "Questionable",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
     ]
   },
   {
@@ -1162,21 +1162,21 @@
     ]
   },
   {
-    "full_name": "Ezekiel Elliott",
-    "search_rank": 111,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Michael Pittman",
     "search_rank": 111,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Ezekiel Elliott",
+    "search_rank": 111,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -1315,21 +1315,21 @@
     ]
   },
   {
-    "full_name": "Nick Chubb",
-    "search_rank": 128,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Rashid Shaheed",
     "search_rank": 128,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Nick Chubb",
+    "search_rank": 128,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -1360,21 +1360,21 @@
     ]
   },
   {
-    "full_name": "Rico Dowdle",
-    "search_rank": 134,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Marvin Mims",
     "search_rank": 134,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Rico Dowdle",
+    "search_rank": 134,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -1513,12 +1513,12 @@
     ]
   },
   {
-    "full_name": "Keenan Allen",
+    "full_name": "Jerome Ford",
     "search_rank": 152,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "WR"
+      "RB"
     ]
   },
   {
@@ -1531,12 +1531,12 @@
     ]
   },
   {
-    "full_name": "Jerome Ford",
+    "full_name": "Keenan Allen",
     "search_rank": 152,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "RB"
+      "WR"
     ]
   },
   {
@@ -1702,7 +1702,7 @@
     ]
   },
   {
-    "full_name": "Cade Otton",
+    "full_name": "Brenton Strange",
     "search_rank": 174,
     "injury_status": "",
     "status": "Active",
@@ -1711,7 +1711,7 @@
     ]
   },
   {
-    "full_name": "Brenton Strange",
+    "full_name": "Cade Otton",
     "search_rank": 174,
     "injury_status": "",
     "status": "Active",
@@ -1747,7 +1747,7 @@
     ]
   },
   {
-    "full_name": "Xavier Legette",
+    "full_name": "Joshua Palmer",
     "search_rank": 177,
     "injury_status": "",
     "status": "Active",
@@ -1756,7 +1756,7 @@
     ]
   },
   {
-    "full_name": "Joshua Palmer",
+    "full_name": "Xavier Legette",
     "search_rank": 177,
     "injury_status": "",
     "status": "Active",
@@ -1774,21 +1774,21 @@
     ]
   },
   {
-    "full_name": "Romeo Doubs",
-    "search_rank": 180,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
     "full_name": "Geno Smith",
     "search_rank": 180,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "QB"
+    ]
+  },
+  {
+    "full_name": "Romeo Doubs",
+    "search_rank": 180,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
     ]
   },
   {
@@ -1828,15 +1828,6 @@
     ]
   },
   {
-    "full_name": "Brashard Smith",
-    "search_rank": 186,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "RB"
-    ]
-  },
-  {
     "full_name": "Sam Darnold",
     "search_rank": 186,
     "injury_status": "",
@@ -1846,8 +1837,8 @@
     ]
   },
   {
-    "full_name": "Frank Gore",
-    "search_rank": 187,
+    "full_name": "Brashard Smith",
+    "search_rank": 186,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
@@ -1855,8 +1846,8 @@
     ]
   },
   {
-    "full_name": "Kareem Hunt",
-    "search_rank": 188,
+    "full_name": "Frank Gore",
+    "search_rank": 187,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
@@ -1870,6 +1861,15 @@
     "status": "Active",
     "fantasy_positions": [
       "QB"
+    ]
+  },
+  {
+    "full_name": "Kareem Hunt",
+    "search_rank": 188,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
     ]
   },
   {
@@ -1963,6 +1963,15 @@
     ]
   },
   {
+    "full_name": "Tyrell Williams",
+    "search_rank": 198,
+    "injury_status": "Questionable",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
+    ]
+  },
+  {
     "full_name": "DJ Giddens",
     "search_rank": 198,
     "injury_status": "",
@@ -1975,15 +1984,6 @@
     "full_name": "Jaylin Noel",
     "search_rank": 198,
     "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
-    "full_name": "Tyrell Williams",
-    "search_rank": 198,
-    "injury_status": "Questionable",
     "status": "Active",
     "fantasy_positions": [
       "WR"
@@ -2062,21 +2062,21 @@
     ]
   },
   {
-    "full_name": "Michael Wilson",
-    "search_rank": 203,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
     "full_name": "Darren Waller",
     "search_rank": 203,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "TE"
+    ]
+  },
+  {
+    "full_name": "Michael Wilson",
+    "search_rank": 203,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
     ]
   },
   {
@@ -2116,15 +2116,6 @@
     ]
   },
   {
-    "full_name": "Russell Wilson",
-    "search_rank": 207,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "QB"
-    ]
-  },
-  {
     "full_name": "Elijah Arroyo",
     "search_rank": 207,
     "injury_status": "",
@@ -2134,12 +2125,12 @@
     ]
   },
   {
-    "full_name": "Cole Kmet",
-    "search_rank": 209,
+    "full_name": "Russell Wilson",
+    "search_rank": 207,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "TE"
+      "QB"
     ]
   },
   {
@@ -2152,10 +2143,19 @@
     ]
   },
   {
-    "full_name": "Isaac TeSlaa",
-    "search_rank": 210,
+    "full_name": "Cole Kmet",
+    "search_rank": 209,
     "injury_status": "",
     "status": "Active",
+    "fantasy_positions": [
+      "TE"
+    ]
+  },
+  {
+    "full_name": "Ted Ginn",
+    "search_rank": 210,
+    "injury_status": "",
+    "status": "Injured Reserve",
     "fantasy_positions": [
       "WR"
     ]
@@ -2170,10 +2170,10 @@
     ]
   },
   {
-    "full_name": "Ted Ginn",
+    "full_name": "Isaac TeSlaa",
     "search_rank": 210,
     "injury_status": "",
-    "status": "Injured Reserve",
+    "status": "Active",
     "fantasy_positions": [
       "WR"
     ]
@@ -2185,15 +2185,6 @@
     "status": "Active",
     "fantasy_positions": [
       "RB"
-    ]
-  },
-  {
-    "full_name": "Dontrelle Inman",
-    "search_rank": 212,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
     ]
   },
   {
@@ -2224,7 +2215,16 @@
     ]
   },
   {
-    "full_name": "Theo Johnson",
+    "full_name": "Dontrelle Inman",
+    "search_rank": 212,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
+    ]
+  },
+  {
+    "full_name": "Juwan Johnson",
     "search_rank": 215,
     "injury_status": "",
     "status": "Active",
@@ -2233,7 +2233,7 @@
     ]
   },
   {
-    "full_name": "Juwan Johnson",
+    "full_name": "Theo Johnson",
     "search_rank": 215,
     "injury_status": "",
     "status": "Active",
@@ -2323,21 +2323,21 @@
     ]
   },
   {
-    "full_name": "Tyler Shough",
-    "search_rank": 234,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "QB"
-    ]
-  },
-  {
     "full_name": "Miles Sanders",
     "search_rank": 234,
     "injury_status": "Questionable",
     "status": "Active",
     "fantasy_positions": [
       "RB"
+    ]
+  },
+  {
+    "full_name": "Tyler Shough",
+    "search_rank": 234,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "QB"
     ]
   },
   {
@@ -2350,7 +2350,7 @@
     ]
   },
   {
-    "full_name": "Le'Veon Bell",
+    "full_name": "Leonard Fournette",
     "search_rank": 235,
     "injury_status": "",
     "status": "Active",
@@ -2359,7 +2359,7 @@
     ]
   },
   {
-    "full_name": "Leonard Fournette",
+    "full_name": "Le'Veon Bell",
     "search_rank": 235,
     "injury_status": "",
     "status": "Active",
@@ -2377,21 +2377,21 @@
     ]
   },
   {
+    "full_name": "Jalen Coker",
+    "search_rank": 237,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "WR"
+    ]
+  },
+  {
     "full_name": "Tahj Brooks",
     "search_rank": 237,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "RB"
-    ]
-  },
-  {
-    "full_name": "Tory Horton",
-    "search_rank": 237,
-    "injury_status": "Questionable",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
     ]
   },
   {
@@ -2404,9 +2404,9 @@
     ]
   },
   {
-    "full_name": "Jalen Coker",
+    "full_name": "Tory Horton",
     "search_rank": 237,
-    "injury_status": "",
+    "injury_status": "Questionable",
     "status": "Active",
     "fantasy_positions": [
       "WR"
@@ -2458,6 +2458,15 @@
     ]
   },
   {
+    "full_name": "Trevor Etienne",
+    "search_rank": 243,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "RB"
+    ]
+  },
+  {
     "full_name": "Tyler Boyd",
     "search_rank": 243,
     "injury_status": "",
@@ -2476,8 +2485,8 @@
     ]
   },
   {
-    "full_name": "Trevor Etienne",
-    "search_rank": 243,
+    "full_name": "D'Onta Foreman",
+    "search_rank": 245,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
@@ -2485,12 +2494,12 @@
     ]
   },
   {
-    "full_name": "D'Onta Foreman",
-    "search_rank": 245,
+    "full_name": "Troy Franklin",
+    "search_rank": 247,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
-      "RB"
+      "WR"
     ]
   },
   {
@@ -2504,15 +2513,6 @@
   },
   {
     "full_name": "Roman Wilson",
-    "search_rank": 247,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "WR"
-    ]
-  },
-  {
-    "full_name": "Troy Franklin",
     "search_rank": 247,
     "injury_status": "",
     "status": "Active",
@@ -2548,21 +2548,21 @@
     ]
   },
   {
-    "full_name": "Tanner Morgan",
-    "search_rank": 249,
-    "injury_status": "",
-    "status": "Active",
-    "fantasy_positions": [
-      "QB"
-    ]
-  },
-  {
     "full_name": "Xavier Restrepo",
     "search_rank": 249,
     "injury_status": "",
     "status": "Active",
     "fantasy_positions": [
       "WR"
+    ]
+  },
+  {
+    "full_name": "Tanner Morgan",
+    "search_rank": 249,
+    "injury_status": "",
+    "status": "Active",
+    "fantasy_positions": [
+      "QB"
     ]
   }
 ]

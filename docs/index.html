@@ -74,7 +74,13 @@
       await setPersistence(auth, indexedDBLocalPersistence);
 
       function streamPublicView() {
-        const mainDocRef = doc(db, 'pages', 'public');
+        const mainDocRef = doc(
+          db,
+          'drafts',
+          '2c64afce-43f6-4c8f-ac0b-263d903e2e18',
+          'pages',
+          'public'
+        );
 
         onSnapshot(mainDocRef, (snap) => {
           const data = snap.data();
@@ -86,7 +92,13 @@
       }
 
       function streamTeamView(user) {
-        const teamDocRef = doc(db, 'pages', user.uid);
+        const teamDocRef = doc(
+          db,
+          'drafts',
+          '2c64afce-43f6-4c8f-ac0b-263d903e2e18',
+          'pages',
+          user.uid
+        );
 
         onSnapshot(teamDocRef, (snap) => {
           const data = snap.data();

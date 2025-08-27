@@ -2,23 +2,16 @@ package function
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"html"
-	"os"
-	"regexp"
 	"strings"
 
 	"cloud.google.com/go/firestore"
+	"github.com/cloudevents/sdk-go/v2/event"
+	"github.com/googleapis/google-cloudevents-go/cloud/firestoredata"
+	"google.golang.org/protobuf/proto"
 )
-
-// FirestoreEvent mirrors the minimal shape of the CloudEvent payload we need.
-type FirestoreEvent struct {
-	OldValue struct{} `json:"oldValue"`
-	Value    struct {
-		Name   string                 `json:"name"`
-		Fields map[string]any         `json:"fields"` // not used – we re-read the doc
-	} `json:"value"`
-}
 
 // Draft mirrors the Firestore document.
 type Draft struct {
@@ -180,32 +173,43 @@ const pageTemplate = `<!DOCTYPE html>
 `
 
 // HandleDraft regenerates the public page every time a draft document is created or updated.
-func HandleDraft(ctx context.Context, e FirestoreEvent) error {
-	if ctx.Value("ce-type") == "google.cloud.firestore.document.v1.deleted" {
+func HandleDraft(ctx context.Context, e event.Event) error {
+	// Ignore deletes.
+	if e.Type() == "google.cloud.firestore.document.v1.deleted" {
 		return nil
 	}
 
-	re := regexp.MustCompile(`^projects\/[^\/]+\/databases\/\(default\)\/documents\/(.+)$`)
-	docPath := re.ReplaceAllString(e.Value.Name, `$1`)
-	if !strings.HasPrefix(docPath, "drafts/") {
-		return fmt.Errorf("unexpected path %q", docPath)
+	// ─────────────── Firestore event payload ───────────────
+	var data firestoredata.DocumentEventData
+
+	opts := proto.UnmarshalOptions{DiscardUnknown: true}
+	if err := opts.Unmarshal(e.Data(), &data); err != nil {
+		return fmt.Errorf("proto.Unmarshal: %w", err)
 	}
-	parts := strings.Split(docPath, "/")
-	draftID := parts[len(parts)-1]
+	if data.GetValue() == nil {
+		return errors.New(`invalid message: "Value" not present`)
+	}
 
-	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
-    if projectID == "" {
-        return fmt.Errorf("GOOGLE_CLOUD_PROJECT not set")
-    }
-    client, err := firestore.NewClient(ctx, projectID)
-    if err != nil {
-        return fmt.Errorf("firestore client: %w", err)
-    }
-    defer client.Close()
+	// ─────────────── Path parsing ───────────────
+	const prefix = "/documents/"
+	name := data.GetValue().GetName()
+	idx := strings.Index(name, prefix)
+	if idx == -1 {
+		return fmt.Errorf("invalid resource name: %s", name)
+	}
+	relPath := name[idx+len(prefix):]                    // e.g. drafts/0776cbd3…
+	draftID := relPath[strings.LastIndex(relPath, "/")+1:]
 
-	snap, err := client.Doc(docPath).Get(ctx)
+	// ─────────────── Firestore read ───────────────
+	client, err := firestore.NewClient(ctx, "test-vickrey")
 	if err != nil {
-		return fmt.Errorf("read draft: %w", err)
+		return fmt.Errorf("firestore client: %w", err)
+	}
+	defer client.Close()
+
+	snap, err := client.Doc(relPath).Get(ctx)
+	if err != nil {
+		return fmt.Errorf("read draft %s: %w", relPath, err)
 	}
 
 	var draft Draft
@@ -213,7 +217,7 @@ func HandleDraft(ctx context.Context, e FirestoreEvent) error {
 		return fmt.Errorf("decode draft: %w", err)
 	}
 
-	// Build comma-separated, HTML-escaped lists
+	// ─────────────── Build HTML ───────────────
 	userNames := make([]string, len(draft.Users))
 	for i, u := range draft.Users {
 		userNames[i] = html.EscapeString(u.DisplayName)
@@ -228,16 +232,19 @@ func HandleDraft(ctx context.Context, e FirestoreEvent) error {
 		strings.Join(userNames, ", "),
 		strings.Join(playerNames, ", "),
 	)
-
 	htmlPage := fmt.Sprintf(pageTemplate, root, draftID, draftID)
 
+	// ─────────────── Firestore write ───────────────
 	if _, err := client.Collection("drafts").
 		Doc(draftID).
 		Collection("pages").
 		Doc("public").
 		Set(ctx, map[string]any{"html": htmlPage}); err != nil {
+
 		return fmt.Errorf("write public page: %w", err)
 	}
 
 	return nil
 }
+
+

@@ -7,5 +7,4 @@ gcloud functions deploy html_builder \
  --trigger-event-filters="database=(default)" \
  --trigger-event-filters-path-pattern="document=drafts/{draftId}" \
  --trigger-location=nam5 \
---set-env-vars=ENV=prod \
  --min-instances=0
