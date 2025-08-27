@@ -45,11 +45,13 @@
       import { getAnalytics } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js';
       import {
         getFirestore,
+        connectFirestoreEmulator,
         doc,
         onSnapshot,
       } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
       import {
         getAuth,
+        connectAuthEmulator,
         onAuthStateChanged,
         signInWithCustomToken,
         indexedDBLocalPersistence,
@@ -69,7 +71,9 @@
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
       const db = getFirestore(app);
+      connectFirestoreEmulator(db, 'localhost', 9090);
       const auth = getAuth(app);
+      // connectAuthEmulator(auth, 'http://localhost:9099');
 
       await setPersistence(auth, indexedDBLocalPersistence);
 
@@ -83,7 +87,9 @@
         );
 
         onSnapshot(mainDocRef, (snap) => {
+          console.log('Public view snapshot received, ', snap);
           const data = snap.data();
+          console.log('Public view data: ', data);
           const html = data?.html ?? '<h1>No HTML found</h1>';
           document.open();
           document.write(html);
