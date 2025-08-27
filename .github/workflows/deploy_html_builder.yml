@@ -1,0 +1,34 @@
+name: Deploy HTML Builder Function
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'functions/html_builder/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - run: |
+          gcloud functions deploy html_builder \
+            --gen2 \
+            --runtime=go125 \
+            --entry-point=HandleDraft \
+            --region=us-central1 \
+            --trigger-event-filters=type=google.cloud.firestore.document.v1.written \
+            --trigger-event-filters=database=\(default\) \
+            --trigger-event-filters-path-pattern=document=drafts/{draftId} \
+            --trigger-location=nam5 \
+            --min-instances=0 \
+            --source=functions/html_builder
