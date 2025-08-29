@@ -14,63 +14,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// constant HTML template; the three %s placeholders are:
-//
-//   1. <div id="root">…</div>            – generated users & players
-//   2. draftId used by mainDocRef
-//   3. draftId used by teamPageRef
-//
-const pageTemplate = `<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Join Draft</title>
-  </head>
-  <style>
-    #joinDraftForm {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      max-width: 28rem;
-    }
-    #joinDraftForm input[type='text'] {
-      width: 100%%;
-      padding: 0.5rem 0.75rem;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-  </style>
-  <body>
-    <div id="root">%s</div>
-    <form id="joinDraftForm">
-      <input
-        type="text"
-        id="sleeperUsername"
-        name="sleeperUsername"
-        placeholder="Enter Sleeper username to join draft."
-        title="Enter Sleeper username to join draft."
-        autocomplete="username"
-        required
-      />
-      <input
-        type="text"
-        id="draftPassword"
-        name="draftPassword"
-        placeholder="Make up a draft password or, if you're re-joining, use your existing password."
-        title="Make up a draft password or, if you're re-joining, use your existing password."
-        autocomplete="current-password"
-        required
-      />
-      <button type="submit">Join Draft</button>
-    </form>
-
-    <script type="module">
-      
-    </script>
-  </body>
-</html>
-`
-
 // HandleDraft regenerates the public page every time a draft document is created or updated.
 func HandleDraft(ctx context.Context, e event.Event) error {
 	// Ignore deletes.
@@ -118,7 +61,6 @@ func HandleDraft(ctx context.Context, e event.Event) error {
 
 	publicHtml := pages.BuildPublicPage(draft)
 
-	// ─────────────── Firestore write ───────────────
 	if _, err := client.Collection("drafts").
 		Doc(draftID).
 		Collection("pages").
@@ -126,6 +68,18 @@ func HandleDraft(ctx context.Context, e event.Event) error {
 		Set(ctx, map[string]any{"html": publicHtml}); err != nil {
 
 		return fmt.Errorf("write public page: %w", err)
+	}
+
+	for _, user := range draft.Users {
+		teamHtml := pages.BuildTeamPage(draft, user)
+		if _, err := client.Collection("drafts").
+			Doc(draftID).
+			Collection("pages").
+			Doc(user.DisplayName).
+			Set(ctx, map[string]any{"html": teamHtml}); err != nil {
+
+			return fmt.Errorf("write team page for %s: %w", user.DisplayName, err)
+		}
 	}
 
 	return nil
