@@ -27,7 +27,13 @@ async function joinDraft(event) {
     } else {
       const token_response = await res.json();
       await signInWithCustomToken(auth, token_response.token);
-      const teamPageRef = doc(db, 'drafts', '%s', 'pages', username);
+      const teamPageRef = doc(
+        db,
+        'drafts',
+        '2c64afce-43f6-4c8f-ac0b-263d903e2e18',
+        'pages',
+        username
+      );
 
       onSnapshot(teamPageRef, (snap) => {
         const data = snap.data();
